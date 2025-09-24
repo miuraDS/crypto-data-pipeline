@@ -1,0 +1,12 @@
+# docker-compose.yml（省略OK）
+services:
+  evaluate_eth_bot: 
+    build:
+      context: .
+    container_name: evaluate_ETH_bot
+    volumes:
+      - ./database:/app/database
+      - ./optuna_db:/app/optuna_db
+      - ../ohlcv_datas:/ohlcv_datas  # ← ✅ ここを修正
+    working_dir: /app
+    # ← command: なしでもOK

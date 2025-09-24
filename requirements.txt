@@ -1,0 +1,10 @@
+pandas
+ccxt
+joblib
+pywt
+lightgbm
+matplotlib
+japanize-matplotlib
+numba
+numpy
+tqdm

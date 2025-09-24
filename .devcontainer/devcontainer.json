@@ -1,0 +1,74 @@
+﻿{
+  "name": "devcontainer-python-node-cli-template",
+  "build": { "dockerfile": "Dockerfile" },
+
+  // Node は Feature で導入（PCを変えても同じ流儀で入る）
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {},
+    "ghcr.io/devcontainers/features/common-utils:2": {}
+  },
+
+  "containerEnv": {
+    "PYTHONPATH": "${containerWorkspaceFolder}/src"
+    // 必要なら API キーもローカルから渡せます（手元の環境変数を使用）
+    // "GEMINI_API_KEY": "${localEnv:GEMINI_API_KEY}",
+    // "OPENAI_API_KEY": "${localEnv:OPENAI_API_KEY}"
+  },
+
+  // ここで “再現手順” を自動化：PATH 恒久化 → CLI 導入 → Python 依存導入
+  "postCreateCommand": "/bin/bash -lc '\n\
+set -e\n\
+# npm グローバル bin を恒久的に PATH へ（nvm のバージョン差異に強い）\n\
+echo \"export PATH=\\$(npm prefix -g)/bin:\\$PATH\" >> ~/.bashrc\n\
+export PATH=$(npm prefix -g)/bin:$PATH\n\
+# CLI を導入（PCを変えても postCreate が毎回同じ状態を作る）\n\
+npm i -g @google/gemini-cli @openai/codex\n\
+# Python 仮想環境と依存\n\
+uv venv && uv pip install -r requirements.txt\n\
+'",
+
+"customizations": {
+  "vscode": {
+    "extensions": [
+      "ms-python.python",
+      "ms-python.vscode-pylance",
+      "ms-toolsai.jupyter",
+      "ms-python.black-formatter",
+      "charliermarsh.ruff",
+      "ms-azuretools.vscode-docker",
+      "redhat.vscode-yaml",
+      "mikestead.dotenv",
+      "eamodio.gitlens",
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint"
+    ],
+    "settings": {
+      // Python
+      "python.defaultInterpreterPath": "${containerWorkspaceFolder}/.venv/bin/python",
+      "python.analysis.extraPaths": ["${containerWorkspaceFolder}/src"],
+
+      // フォーマット/リンタ
+      "editor.formatOnSave": true,
+      "python.formatting.provider": "black",
+      "black-formatter.args": ["--line-length", "100"],
+      "ruff.lint.enable": true,
+      "ruff.format.args": ["--line-length", "100"],
+
+      // JS/MD 整形
+      "[markdown]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+      "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+      "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+      "prettier.printWidth": 100,
+
+      // YAML スキーマ（必要に応じて）
+      "yaml.validate": true,
+
+      // Jupyter
+      "jupyter.askForKernelRestart": false
+    }
+  }
+}
+,
+
+  "remoteUser": "vscode"
+}

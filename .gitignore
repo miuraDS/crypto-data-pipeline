@@ -1,0 +1,20 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+.venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Data files
+# Ignore content in data directory, but not the directory itself
+data/*
+!data/.gitkeep
+*.db
+*.parquet
+
+# IDE settings
+.vscode/
+.idea/
