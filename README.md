@@ -1,108 +1,59 @@
+# Crypto Data Pipeline for GMO Coin
 
-```markdown
-# Crypto Data Pipeline
-
-A Python-based pipeline for fetching, preprocessing, and transforming cryptocurrency price data into structured OHLCV format.
-This repository demonstrates data engineering skills (API integration, preprocessing, and reproducible workflows) as part of a broader crypto analysis portfolio.
+This repository contains Jupyter notebooks for fetching cryptocurrency trade data from the GMO Coin public API, converting it into OHLC (Open, High, Low, Close) data, and subsequently calculating the ATR (Average True Range).
 
 ---
 
 ## 🚀 Features
-- Fetch cryptocurrency price time series data via API
-- Preprocess raw data (cleaning, timezone alignment, missing value handling)
-- Convert data into OHLCV (Open, High, Low, Close, Volume) format
-- Calculate **ATR (Average True Range)** for volatility analysis
-- Modular structure for easy extension (e.g., new data sources or formats)
+- Fetch historical trade data from GMO Coin's API.
+- Convert raw trade data into OHLC format.
+- Calculate and add the ATR (Average True Range) to the OHLC data for volatility analysis.
 
 ---
 
 ## 📂 Repository Structure
 ```
-
 crypto-data-pipeline/
 ├── README.md
 ├── requirements.txt        # Dependencies
-├── data/                   # Sample raw and processed data
-├── notebooks/              # Example usage in Jupyter notebooks
+├── data/                   # Directory for raw and processed data
+├── notebooks/              # Jupyter notebooks for each processing step
+│   ├── get_ohlcv_data.ipynb
+│   └── culculate_atr.ipynb
 └── src/
-├── data\_fetch/         # Scripts to fetch crypto data from APIs
-├── preprocessing/      # Scripts to clean & transform data
-├── indicators/         # Scripts for OHLC/ATR calculations
-└── utils/              # Helper functions (logging, config, etc.)
-
-````
+    └── data_fetcher/       # Python scripts for fetching data
+```
 
 ---
 
 ## ⚙️ Installation
-```bash
-# Clone the repository
-git clone https://github.com/your-username/crypto-data-pipeline.git
-cd crypto-data-pipeline
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/crypto-data-pipeline.git
+   cd crypto-data-pipeline
+   ```
 
-# Install dependencies
-pip install -r requirements.txt
-````
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ---
 
 ## 🛠 Usage
 
-### 1. Fetch Data
+The data processing is divided into two main steps, each handled by a separate Jupyter Notebook.
 
-```bash
-python src/data_fetch/fetch_prices.py --symbol BTC --interval 1h --output data/raw_btc.json
-```
+### 1. Fetch Data and Create OHLC
+- **Notebook:** `notebooks/get_ohlcv_data.ipynb`
+- **Purpose:** This notebook connects to the GMO Coin API to download historical trade data for a specified cryptocurrency and then processes this data to create an OHLC dataset.
 
-### 2. Preprocess Data
-
-```bash
-python src/preprocessing/preprocess.py --input data/raw_btc.json --output data/btc_ohlcv.csv
-```
-
-### 3. Calculate OHLC + ATR
-
-```bash
-python src/indicators/calc_ohlc_atr.py --input data/btc_ohlcv.csv --output data/btc_ohlc_atr.csv --atr_period 14
-```
-
-### 4. Explore Data in Notebook
-
-Open [notebooks/ohlcv\_analysis.ipynb](notebooks/ohlcv_analysis.ipynb) to see examples of:
-
-* OHLC data visualization
-* ATR-based volatility analysis
-* Simple trading signal experiments
-
----
-
-## 📊 Example Output
-
-| timestamp           | open     | high     | low      | close    | volume | atr\_14 |
-| ------------------- | -------- | -------- | -------- | -------- | ------ | ------- |
-| 2025-01-01 00:00:00 | 42000.50 | 42210.75 | 41900.10 | 42150.00 | 120.35 | 350.42  |
-| 2025-01-01 01:00:00 | 42150.00 | 42300.00 | 42010.25 | 42290.50 | 98.44  | 365.18  |
-
----
-
-## 🔮 Future Work
-
-* Add support for multiple exchanges (Binance, Coinbase, etc.)
-* Automate scheduling with Airflow/Prefect
-* Containerize with Docker for reproducible deployment
-* Store processed data in a database (PostgreSQL, DuckDB, etc.)
-* Extend indicator set (RSI, MACD, Bollinger Bands, etc.)
+### 2. Calculate ATR
+- **Notebook:** `notebooks/culculate_atr.ipynb`
+- **Purpose:** This notebook takes the generated OHLC data as input and calculates the Average True Range (ATR), adding it as a new column to the dataset.
 
 ---
 
 ## 📜 License
 
 This project is licensed under the MIT License.
-Feel free to use, modify, and share.
-
----
-
-```
-
----
-
